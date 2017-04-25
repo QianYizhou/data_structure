@@ -82,3 +82,16 @@ Temporary Items
 /install-sh
 /ltmain.sh
 /missing
+/Makefile
+/build/.deps/ut_foot_module-main.Po
+/build/.deps/ut_foot_module-test_simu_plan.Po
+/build/.deps/ut_foot_module-velocityprofile_trap.Po
+/build/Makefile
+/build/ut_foot_module
+/build/ut_foot_module-main.o
+/build/ut_foot_module-test_simu_plan.o
+/build/ut_foot_module-velocityprofile_trap.o
+/config.log
+/config.status
+/libtool
+/stamp-h1
