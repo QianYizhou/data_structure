@@ -1,9 +1,6 @@
 #TEST_BIN=$1
-#TEST_BIN="./build/ut_foot_module -g math -v -c"
-#TEST_BIN="./build/ut_foot_module -g bezier -v -c"
-#TEST_BIN="./build/ut_foot_module -g matrix_api -v -c"
 #TEST_BIN="./build/ut_foot_module -g user_mapping -v -c"
-TEST_BIN="./build/ut_foot_module -g simu_plan -v -c"
+TEST_BIN="./build/ut_frame -g test_polynomial_calc -v -c"
 if [[ "" != $1 ]]; then
     TEST_BIN=$1
 fi

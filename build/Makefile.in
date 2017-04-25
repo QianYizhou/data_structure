@@ -32,7 +32,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = ut_foot_module$(EXEEXT)
+bin_PROGRAMS = ut_frame$(EXEEXT)
 subdir = build
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -45,27 +45,19 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am_ut_foot_module_OBJECTS = ut_foot_module-main.$(OBJEXT) \
-	ut_foot_module-velocityprofile_trap.$(OBJEXT) \
-	ut_foot_module-test_simu_plan.$(OBJEXT)
-ut_foot_module_OBJECTS = $(am_ut_foot_module_OBJECTS)
-ut_foot_module_LDADD = $(LDADD)
-ut_foot_module_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(ut_foot_module_CXXFLAGS) $(CXXFLAGS) \
-	$(ut_foot_module_LDFLAGS) $(LDFLAGS) -o $@
+am_ut_frame_OBJECTS = ut_frame-main.$(OBJEXT) \
+	ut_frame-velocityprofile_trap.$(OBJEXT) \
+	ut_frame-polynomial_calc.$(OBJEXT) \
+	ut_frame-test_simu_plan.$(OBJEXT) \
+	ut_frame-test_polynomial_calc.$(OBJEXT)
+ut_frame_OBJECTS = $(am_ut_frame_OBJECTS)
+ut_frame_LDADD = $(LDADD)
+ut_frame_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(ut_frame_CXXFLAGS) \
+	$(CXXFLAGS) $(ut_frame_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-LTCXXCOMPILE = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-CXXLD = $(CXX)
-CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
@@ -75,8 +67,17 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(ut_foot_module_SOURCES)
-DIST_SOURCES = $(ut_foot_module_SOURCES)
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
+SOURCES = $(ut_frame_SOURCES)
+DIST_SOURCES = $(ut_frame_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -194,32 +195,38 @@ CPPUTEST_HOME = ../
 INCLUDES = -I../include \
 				  -I../project \
 				  -I../project/kdl \
+				  -I../project/week2 \
 				  -I../mock \
 				  -I../expect
 
-ut_foot_module_SOURCES = \
+ut_frame_SOURCES = \
 						  ../testcode/main.cpp \
 						  \
 						  ../project/kdl/velocityprofile_trap.cpp \
 						  ../project/kdl/velocityprofile_trap.hpp \
 						  \
-						  ../testcode/test_simu_plan.cpp
+						  ../project/week2/polynomial_calc.c \
+						  ../project/week2/polynomial_calc.h \
+						  \
+						  ../testcode/test_simu_plan.cpp \
+						  \
+						  ../testcode/week2/test_polynomial_calc.cpp
 
-ut_foot_module_CXXFLAGS = \
+ut_frame_CXXFLAGS = \
 						  -DTIXML_USE_STL \
 						  `pkg-config glib-2.0 --cflags` \
 						  -g -Wall -fprofile-arcs -ftest-coverage \
 						  -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h \
 						  -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
 
-ut_foot_module_CFLAGS = \
+ut_frame_CFLAGS = \
 						  -DTIXML_USE_STL \
 						  `pkg-config glib-2.0 --cflags` \
 						  -g -Wall -fprofile-arcs -ftest-coverage \
 						  -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h \
 						  -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
 
-ut_foot_module_LDFLAGS = \
+ut_frame_LDFLAGS = \
 						  `pkg-config glib-2.0 --libs` \
 						  -fprofile-arcs -ftest-coverage \
 						  -L../libs/fedora_10 -lCppUTest -lCppUTestExt \
@@ -229,7 +236,7 @@ ut_foot_module_LDFLAGS = \
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cpp .lo .o .obj
+.SUFFIXES: .c .cpp .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -287,9 +294,9 @@ clean-binPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-ut_foot_module$(EXEEXT): $(ut_foot_module_OBJECTS) $(ut_foot_module_DEPENDENCIES) 
-	@rm -f ut_foot_module$(EXEEXT)
-	$(ut_foot_module_LINK) $(ut_foot_module_OBJECTS) $(ut_foot_module_LDADD) $(LIBS)
+ut_frame$(EXEEXT): $(ut_frame_OBJECTS) $(ut_frame_DEPENDENCIES) 
+	@rm -f ut_frame$(EXEEXT)
+	$(ut_frame_LINK) $(ut_frame_OBJECTS) $(ut_frame_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -297,9 +304,46 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ut_foot_module-main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ut_foot_module-test_simu_plan.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ut_foot_module-velocityprofile_trap.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ut_frame-main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ut_frame-polynomial_calc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ut_frame-test_polynomial_calc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ut_frame-test_simu_plan.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ut_frame-velocityprofile_trap.Po@am__quote@
+
+.c.o:
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(COMPILE) -c $<
+
+.c.obj:
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+.c.lo:
+@am__fastdepCC_TRUE@	$(LTCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
+ut_frame-polynomial_calc.o: ../project/week2/polynomial_calc.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CFLAGS) $(CFLAGS) -MT ut_frame-polynomial_calc.o -MD -MP -MF $(DEPDIR)/ut_frame-polynomial_calc.Tpo -c -o ut_frame-polynomial_calc.o `test -f '../project/week2/polynomial_calc.c' || echo '$(srcdir)/'`../project/week2/polynomial_calc.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/ut_frame-polynomial_calc.Tpo $(DEPDIR)/ut_frame-polynomial_calc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='../project/week2/polynomial_calc.c' object='ut_frame-polynomial_calc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CFLAGS) $(CFLAGS) -c -o ut_frame-polynomial_calc.o `test -f '../project/week2/polynomial_calc.c' || echo '$(srcdir)/'`../project/week2/polynomial_calc.c
+
+ut_frame-polynomial_calc.obj: ../project/week2/polynomial_calc.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CFLAGS) $(CFLAGS) -MT ut_frame-polynomial_calc.obj -MD -MP -MF $(DEPDIR)/ut_frame-polynomial_calc.Tpo -c -o ut_frame-polynomial_calc.obj `if test -f '../project/week2/polynomial_calc.c'; then $(CYGPATH_W) '../project/week2/polynomial_calc.c'; else $(CYGPATH_W) '$(srcdir)/../project/week2/polynomial_calc.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/ut_frame-polynomial_calc.Tpo $(DEPDIR)/ut_frame-polynomial_calc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='../project/week2/polynomial_calc.c' object='ut_frame-polynomial_calc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CFLAGS) $(CFLAGS) -c -o ut_frame-polynomial_calc.obj `if test -f '../project/week2/polynomial_calc.c'; then $(CYGPATH_W) '../project/week2/polynomial_calc.c'; else $(CYGPATH_W) '$(srcdir)/../project/week2/polynomial_calc.c'; fi`
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -322,47 +366,61 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
-ut_foot_module-main.o: ../testcode/main.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_foot_module_CXXFLAGS) $(CXXFLAGS) -MT ut_foot_module-main.o -MD -MP -MF $(DEPDIR)/ut_foot_module-main.Tpo -c -o ut_foot_module-main.o `test -f '../testcode/main.cpp' || echo '$(srcdir)/'`../testcode/main.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_foot_module-main.Tpo $(DEPDIR)/ut_foot_module-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../testcode/main.cpp' object='ut_foot_module-main.o' libtool=no @AMDEPBACKSLASH@
+ut_frame-main.o: ../testcode/main.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -MT ut_frame-main.o -MD -MP -MF $(DEPDIR)/ut_frame-main.Tpo -c -o ut_frame-main.o `test -f '../testcode/main.cpp' || echo '$(srcdir)/'`../testcode/main.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_frame-main.Tpo $(DEPDIR)/ut_frame-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../testcode/main.cpp' object='ut_frame-main.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_foot_module_CXXFLAGS) $(CXXFLAGS) -c -o ut_foot_module-main.o `test -f '../testcode/main.cpp' || echo '$(srcdir)/'`../testcode/main.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -c -o ut_frame-main.o `test -f '../testcode/main.cpp' || echo '$(srcdir)/'`../testcode/main.cpp
 
-ut_foot_module-main.obj: ../testcode/main.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_foot_module_CXXFLAGS) $(CXXFLAGS) -MT ut_foot_module-main.obj -MD -MP -MF $(DEPDIR)/ut_foot_module-main.Tpo -c -o ut_foot_module-main.obj `if test -f '../testcode/main.cpp'; then $(CYGPATH_W) '../testcode/main.cpp'; else $(CYGPATH_W) '$(srcdir)/../testcode/main.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_foot_module-main.Tpo $(DEPDIR)/ut_foot_module-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../testcode/main.cpp' object='ut_foot_module-main.obj' libtool=no @AMDEPBACKSLASH@
+ut_frame-main.obj: ../testcode/main.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -MT ut_frame-main.obj -MD -MP -MF $(DEPDIR)/ut_frame-main.Tpo -c -o ut_frame-main.obj `if test -f '../testcode/main.cpp'; then $(CYGPATH_W) '../testcode/main.cpp'; else $(CYGPATH_W) '$(srcdir)/../testcode/main.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_frame-main.Tpo $(DEPDIR)/ut_frame-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../testcode/main.cpp' object='ut_frame-main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_foot_module_CXXFLAGS) $(CXXFLAGS) -c -o ut_foot_module-main.obj `if test -f '../testcode/main.cpp'; then $(CYGPATH_W) '../testcode/main.cpp'; else $(CYGPATH_W) '$(srcdir)/../testcode/main.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -c -o ut_frame-main.obj `if test -f '../testcode/main.cpp'; then $(CYGPATH_W) '../testcode/main.cpp'; else $(CYGPATH_W) '$(srcdir)/../testcode/main.cpp'; fi`
 
-ut_foot_module-velocityprofile_trap.o: ../project/kdl/velocityprofile_trap.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_foot_module_CXXFLAGS) $(CXXFLAGS) -MT ut_foot_module-velocityprofile_trap.o -MD -MP -MF $(DEPDIR)/ut_foot_module-velocityprofile_trap.Tpo -c -o ut_foot_module-velocityprofile_trap.o `test -f '../project/kdl/velocityprofile_trap.cpp' || echo '$(srcdir)/'`../project/kdl/velocityprofile_trap.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_foot_module-velocityprofile_trap.Tpo $(DEPDIR)/ut_foot_module-velocityprofile_trap.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../project/kdl/velocityprofile_trap.cpp' object='ut_foot_module-velocityprofile_trap.o' libtool=no @AMDEPBACKSLASH@
+ut_frame-velocityprofile_trap.o: ../project/kdl/velocityprofile_trap.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -MT ut_frame-velocityprofile_trap.o -MD -MP -MF $(DEPDIR)/ut_frame-velocityprofile_trap.Tpo -c -o ut_frame-velocityprofile_trap.o `test -f '../project/kdl/velocityprofile_trap.cpp' || echo '$(srcdir)/'`../project/kdl/velocityprofile_trap.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_frame-velocityprofile_trap.Tpo $(DEPDIR)/ut_frame-velocityprofile_trap.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../project/kdl/velocityprofile_trap.cpp' object='ut_frame-velocityprofile_trap.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_foot_module_CXXFLAGS) $(CXXFLAGS) -c -o ut_foot_module-velocityprofile_trap.o `test -f '../project/kdl/velocityprofile_trap.cpp' || echo '$(srcdir)/'`../project/kdl/velocityprofile_trap.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -c -o ut_frame-velocityprofile_trap.o `test -f '../project/kdl/velocityprofile_trap.cpp' || echo '$(srcdir)/'`../project/kdl/velocityprofile_trap.cpp
 
-ut_foot_module-velocityprofile_trap.obj: ../project/kdl/velocityprofile_trap.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_foot_module_CXXFLAGS) $(CXXFLAGS) -MT ut_foot_module-velocityprofile_trap.obj -MD -MP -MF $(DEPDIR)/ut_foot_module-velocityprofile_trap.Tpo -c -o ut_foot_module-velocityprofile_trap.obj `if test -f '../project/kdl/velocityprofile_trap.cpp'; then $(CYGPATH_W) '../project/kdl/velocityprofile_trap.cpp'; else $(CYGPATH_W) '$(srcdir)/../project/kdl/velocityprofile_trap.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_foot_module-velocityprofile_trap.Tpo $(DEPDIR)/ut_foot_module-velocityprofile_trap.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../project/kdl/velocityprofile_trap.cpp' object='ut_foot_module-velocityprofile_trap.obj' libtool=no @AMDEPBACKSLASH@
+ut_frame-velocityprofile_trap.obj: ../project/kdl/velocityprofile_trap.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -MT ut_frame-velocityprofile_trap.obj -MD -MP -MF $(DEPDIR)/ut_frame-velocityprofile_trap.Tpo -c -o ut_frame-velocityprofile_trap.obj `if test -f '../project/kdl/velocityprofile_trap.cpp'; then $(CYGPATH_W) '../project/kdl/velocityprofile_trap.cpp'; else $(CYGPATH_W) '$(srcdir)/../project/kdl/velocityprofile_trap.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_frame-velocityprofile_trap.Tpo $(DEPDIR)/ut_frame-velocityprofile_trap.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../project/kdl/velocityprofile_trap.cpp' object='ut_frame-velocityprofile_trap.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_foot_module_CXXFLAGS) $(CXXFLAGS) -c -o ut_foot_module-velocityprofile_trap.obj `if test -f '../project/kdl/velocityprofile_trap.cpp'; then $(CYGPATH_W) '../project/kdl/velocityprofile_trap.cpp'; else $(CYGPATH_W) '$(srcdir)/../project/kdl/velocityprofile_trap.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -c -o ut_frame-velocityprofile_trap.obj `if test -f '../project/kdl/velocityprofile_trap.cpp'; then $(CYGPATH_W) '../project/kdl/velocityprofile_trap.cpp'; else $(CYGPATH_W) '$(srcdir)/../project/kdl/velocityprofile_trap.cpp'; fi`
 
-ut_foot_module-test_simu_plan.o: ../testcode/test_simu_plan.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_foot_module_CXXFLAGS) $(CXXFLAGS) -MT ut_foot_module-test_simu_plan.o -MD -MP -MF $(DEPDIR)/ut_foot_module-test_simu_plan.Tpo -c -o ut_foot_module-test_simu_plan.o `test -f '../testcode/test_simu_plan.cpp' || echo '$(srcdir)/'`../testcode/test_simu_plan.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_foot_module-test_simu_plan.Tpo $(DEPDIR)/ut_foot_module-test_simu_plan.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../testcode/test_simu_plan.cpp' object='ut_foot_module-test_simu_plan.o' libtool=no @AMDEPBACKSLASH@
+ut_frame-test_simu_plan.o: ../testcode/test_simu_plan.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -MT ut_frame-test_simu_plan.o -MD -MP -MF $(DEPDIR)/ut_frame-test_simu_plan.Tpo -c -o ut_frame-test_simu_plan.o `test -f '../testcode/test_simu_plan.cpp' || echo '$(srcdir)/'`../testcode/test_simu_plan.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_frame-test_simu_plan.Tpo $(DEPDIR)/ut_frame-test_simu_plan.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../testcode/test_simu_plan.cpp' object='ut_frame-test_simu_plan.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_foot_module_CXXFLAGS) $(CXXFLAGS) -c -o ut_foot_module-test_simu_plan.o `test -f '../testcode/test_simu_plan.cpp' || echo '$(srcdir)/'`../testcode/test_simu_plan.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -c -o ut_frame-test_simu_plan.o `test -f '../testcode/test_simu_plan.cpp' || echo '$(srcdir)/'`../testcode/test_simu_plan.cpp
 
-ut_foot_module-test_simu_plan.obj: ../testcode/test_simu_plan.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_foot_module_CXXFLAGS) $(CXXFLAGS) -MT ut_foot_module-test_simu_plan.obj -MD -MP -MF $(DEPDIR)/ut_foot_module-test_simu_plan.Tpo -c -o ut_foot_module-test_simu_plan.obj `if test -f '../testcode/test_simu_plan.cpp'; then $(CYGPATH_W) '../testcode/test_simu_plan.cpp'; else $(CYGPATH_W) '$(srcdir)/../testcode/test_simu_plan.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_foot_module-test_simu_plan.Tpo $(DEPDIR)/ut_foot_module-test_simu_plan.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../testcode/test_simu_plan.cpp' object='ut_foot_module-test_simu_plan.obj' libtool=no @AMDEPBACKSLASH@
+ut_frame-test_simu_plan.obj: ../testcode/test_simu_plan.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -MT ut_frame-test_simu_plan.obj -MD -MP -MF $(DEPDIR)/ut_frame-test_simu_plan.Tpo -c -o ut_frame-test_simu_plan.obj `if test -f '../testcode/test_simu_plan.cpp'; then $(CYGPATH_W) '../testcode/test_simu_plan.cpp'; else $(CYGPATH_W) '$(srcdir)/../testcode/test_simu_plan.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_frame-test_simu_plan.Tpo $(DEPDIR)/ut_frame-test_simu_plan.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../testcode/test_simu_plan.cpp' object='ut_frame-test_simu_plan.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_foot_module_CXXFLAGS) $(CXXFLAGS) -c -o ut_foot_module-test_simu_plan.obj `if test -f '../testcode/test_simu_plan.cpp'; then $(CYGPATH_W) '../testcode/test_simu_plan.cpp'; else $(CYGPATH_W) '$(srcdir)/../testcode/test_simu_plan.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -c -o ut_frame-test_simu_plan.obj `if test -f '../testcode/test_simu_plan.cpp'; then $(CYGPATH_W) '../testcode/test_simu_plan.cpp'; else $(CYGPATH_W) '$(srcdir)/../testcode/test_simu_plan.cpp'; fi`
+
+ut_frame-test_polynomial_calc.o: ../testcode/week2/test_polynomial_calc.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -MT ut_frame-test_polynomial_calc.o -MD -MP -MF $(DEPDIR)/ut_frame-test_polynomial_calc.Tpo -c -o ut_frame-test_polynomial_calc.o `test -f '../testcode/week2/test_polynomial_calc.cpp' || echo '$(srcdir)/'`../testcode/week2/test_polynomial_calc.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_frame-test_polynomial_calc.Tpo $(DEPDIR)/ut_frame-test_polynomial_calc.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../testcode/week2/test_polynomial_calc.cpp' object='ut_frame-test_polynomial_calc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -c -o ut_frame-test_polynomial_calc.o `test -f '../testcode/week2/test_polynomial_calc.cpp' || echo '$(srcdir)/'`../testcode/week2/test_polynomial_calc.cpp
+
+ut_frame-test_polynomial_calc.obj: ../testcode/week2/test_polynomial_calc.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -MT ut_frame-test_polynomial_calc.obj -MD -MP -MF $(DEPDIR)/ut_frame-test_polynomial_calc.Tpo -c -o ut_frame-test_polynomial_calc.obj `if test -f '../testcode/week2/test_polynomial_calc.cpp'; then $(CYGPATH_W) '../testcode/week2/test_polynomial_calc.cpp'; else $(CYGPATH_W) '$(srcdir)/../testcode/week2/test_polynomial_calc.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/ut_frame-test_polynomial_calc.Tpo $(DEPDIR)/ut_frame-test_polynomial_calc.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='../testcode/week2/test_polynomial_calc.cpp' object='ut_frame-test_polynomial_calc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ut_frame_CXXFLAGS) $(CXXFLAGS) -c -o ut_frame-test_polynomial_calc.obj `if test -f '../testcode/week2/test_polynomial_calc.cpp'; then $(CYGPATH_W) '../testcode/week2/test_polynomial_calc.cpp'; else $(CYGPATH_W) '$(srcdir)/../testcode/week2/test_polynomial_calc.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

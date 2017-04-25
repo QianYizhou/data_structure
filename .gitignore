@@ -95,3 +95,16 @@ Temporary Items
 /config.status
 /libtool
 /stamp-h1
+/build/.deps/ut_foot_module-polynomial_calc.Po
+/build/.deps/ut_foot_module-test_polynomial_calc.Po
+/build/.deps/ut_frame-main.Po
+/build/.deps/ut_frame-polynomial_calc.Po
+/build/.deps/ut_frame-test_polynomial_calc.Po
+/build/.deps/ut_frame-test_simu_plan.Po
+/build/.deps/ut_frame-velocityprofile_trap.Po
+/build/ut_frame-main.o
+/build/ut_frame-polynomial_calc.o
+/build/ut_frame-test_polynomial_calc.o
+/build/ut_frame-test_simu_plan.o
+/build/ut_frame-velocityprofile_trap.o
+/build/ut_frame
