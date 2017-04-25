@@ -288,11 +288,21 @@ struct PolyMgr *
     return mgr;
 }
 
-struct PolyMgr *
-            Polynomial_AddTo( 
-                    struct PolyMgr *p1, 
-                    const struct PolyMgr *p2 )
+void    Polynomial_AddTo( 
+        struct PolyMgr *p1, 
+        const struct PolyMgr *p2 )
 {
+    /*
+     * simple one
+     */
+    struct PolyMgr *mgr = Polynomial_Add( p1, p2 );
+
+    p1 ->front = mgr ->front;
+    p1 ->rear = mgr ->rear;
+    p1 ->size = mgr ->size;
+
+    Polynomial_DecreateMgr( p1 );
+#if 0
     struct PolyMgr *mgr = Polynomial_CreateMgr();
     Polynomial tmp1, tmp2;
 
@@ -300,41 +310,71 @@ struct PolyMgr *
         printf( "Polynomial_CreateMgr failed\n" );
         return NULL;
     }
+#endif
 
     if ( NULL == p1 || NULL == p2 ) {
         printf( "input param invalid\n" );
         return NULL;
     }
 
+
     tmp1 = p1 ->front;
     tmp2 = p2 ->front;
 
+    //FIXME: modify front and rear of p1
+    
     while ( tmp1 && tmp2 ) {
         if ( tmp1 ->expon > tmp2 ->expon ) {
-            Polynomial_Attach( tmp1 ->coef, tmp1 ->expon, mgr );
+            //Polynomial_Attach( tmp1 ->coef, tmp1 ->expon, mgr );
             tmp1 = tmp1 ->link;
         } else if ( tmp1 ->expon < tmp2 ->expon ) {
-            Polynomial_Attach( tmp2 ->coef, tmp2 ->expon, mgr );
+            //Polynomial_Attach( tmp2 ->coef, tmp2 ->expon, mgr );
+
+            /*
+             * malloc and add
+             */
+            struct PolyNode *pNode = malloc( sizeof(struct PolyNode) );
+            if ( NULL == pNode ) {
+                perror( "malloc failed!" );
+                return;
+            }
+
+            pNode ->coef = tmp2 ->coef;
+            pNode ->expon = tmp2 ->expon;
+            pNode ->link = tmp ->link;
+
+            tmp1 ->link = pNode;
+
+            p1 ->size ++;
+
+            tmp1 = pNode ->link;
+
+            /*
+             * next tmp2 
+             */
             tmp2 = tmp2 ->link;
         } else {
-            Polynomial_Attach( tmp1 ->coef + tmp2 ->coef,
-                    tmp1 ->expon, mgr );
+            //Polynomial_Attach( tmp1 ->coef + tmp2 ->coef,
+            //        tmp1 ->expon, mgr );
+            tmp1 ->coef += tmp2 ->coef;
+
             tmp1 = tmp1 ->link;
             tmp2 = tmp2 ->link;
         }
     }
 
-    while ( tmp1 ) {
-        Polynomial_Attach( tmp1 ->coef, tmp1 ->expon, mgr );
-        tmp1 = tmp1 ->link;
-    }
+    //while ( tmp1 ) {
+    //    Polynomial_Attach( tmp1 ->coef, tmp1 ->expon, mgr );
+    //    tmp1 = tmp1 ->link;
+    //}
     while ( tmp2 ) {
-        Polynomial_Attach( tmp2 ->coef, tmp2 ->expon, mgr );
+        Polynomial_Attach( tmp2 ->coef, tmp2 ->expon, p1 );
         tmp2 = tmp2 ->link;
     }
 
-    return mgr;
+    //return mgr;
 }
+
 struct PolyMgr *
             Polynomial_Multi(
                     const struct PolyMgr *p1,
@@ -361,18 +401,23 @@ struct PolyMgr *
         }
 
         while ( (tmp2=p2 ->front) ) {
-        Polynomial_Attach( 
-                tmp1 ->coef * tmp2 ->coef,
-                tmp1 ->expon + tmp2 ->expon,
-                m1 );
+            Polynomial_Attach( 
+                    tmp1 ->coef * tmp2 ->coef,
+                    tmp1 ->expon + tmp2 ->expon,
+                    m1 );
+
+#if 1
+            tmp = Polynomial_Add( mgr, m1 );
+            Polynomial_DecreateMgr( mgr );
+            mgr = tmp;
+#else
+            Polynomial_AddTo( mgr, m1 );
+#endif
         }
 
-        result = Polynomial_Add( tmp, m1 );
+        Polynomial_DecreateMgr( m1 );
     }
-    tmp1 = p1 ->front;
 
-    tmp2 = p2 ->front;
-
-    return NULL;
+    return mgr;
 }
 

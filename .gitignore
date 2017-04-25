@@ -108,3 +108,9 @@ Temporary Items
 /build/ut_frame-test_simu_plan.o
 /build/ut_frame-velocityprofile_trap.o
 /build/ut_frame
+
+*.Tpo
+
+autom4te.cache/output.1
+
+autom4te.cache/traces.1
