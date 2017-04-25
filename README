@@ -1,0 +1,15 @@
+COMPILE:
+    1. configure
+        1.1 #for 32Bit
+        ./configure --host=x86-linux
+        1.2 #for 64Bit
+        ./configure --host=x86_64-linux
+    2. make
+        $ make				or 
+		$ make clean all	or ...
+    3. clean the configuration
+        $ make distclean
+    4. make distribution
+        $ make dist
+
+
